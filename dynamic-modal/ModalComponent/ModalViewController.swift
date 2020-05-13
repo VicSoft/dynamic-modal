@@ -11,25 +11,28 @@ import UIKit
 final class ModalViewController: UIViewController {
     
     var canShowBackgroundOnSwipe: Bool = false
-    var presentationType: ModalEnum.PresentationType = .modal
-    var delegate: ModalViewDelegate?
+    var presentationType: ModalEnum.PresentationType = .alert
+    weak var delegate: ModalViewDelegate?
     
     // view height without navigationBar
     private let parentViewHeight: CGFloat = UIScreen.main.bounds.height
     
-    private var containerView: ContainerView = ContainerView(withHeight: 80)
-    private var initialViewHeight: CGFloat = 0
+    private var initialViewHeight: CGFloat
+    private var managerTopPosition: CGFloat = 0
     private var modalContainerTopConstraint: NSLayoutConstraint?
     private var modalWrapperTopConstraint: NSLayoutConstraint?
     private var backgroundViewBottomConstraint: NSLayoutConstraint?
-    private var backgroundView: BackgroundButton?
+    private var backgroundView: ModalBackgroundButton?
+    private var callerVc: UIViewController?
+    private lazy var containerView: ContainerView = ContainerView(withHeight: initialViewHeight)
     private lazy var startModalPosition = parentViewHeight - containerView.initialViewHeight
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(withType: ModalEnum.PresentationType) {
+    init(withType: ModalEnum.PresentationType, initialHeight: CGFloat = 80) {
+        initialViewHeight = initialHeight
         super.init(nibName: nil, bundle: nil)
         presentationType = withType
         modalPresentationStyle = .overFullScreen
@@ -42,27 +45,36 @@ final class ModalViewController: UIViewController {
         setupView()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        resetPositon()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        if presentationType == .alert {
-            animate({[weak self] in
-                self?.modalWrapperTopConstraint?.constant = self?.startModalPosition ?? 0
-                self?.modalContainerTopConstraint?.constant = self?.startModalPosition ?? 0
-            }, completion: {
-                self.addBackgroundButton()
-            })
+        switch presentationType {
+        case .alert:
+            show {[weak self] in
+                self?.toggleBackgroundButton()
+            }
+        default: break
         }
     }
     
-    func configure(in parentView: UIView) {
-        if presentationType == .modal {
+    func configure(in viewController: UIViewController) {
+        let initialContainerPosition = (startModalPosition * 2)
+        var parentView = view ?? UIView()
+        
+        switch presentationType {
+        case .modal:
             // removing default constraints from system
+            parentView = viewController.view ?? UIView()
             view.translatesAutoresizingMaskIntoConstraints = false
-            modalWrapperTopConstraint = view.topAnchor.constraint(equalTo: parentView.topAnchor, constant: (startModalPosition * 2))
+            
+            modalWrapperTopConstraint = view.topAnchor.constraint(equalTo: parentView.topAnchor, constant: initialContainerPosition)
             
             parentView.addSubview(view)
-            
             NSLayoutConstraint.activate([
                 modalWrapperTopConstraint!,
                 view.leadingAnchor.constraint(equalTo: parentView.leadingAnchor),
@@ -70,179 +82,174 @@ final class ModalViewController: UIViewController {
                 view.bottomAnchor.constraint(equalTo: parentView.bottomAnchor)
             ])
             view.layoutIfNeeded()
-            containerView.configure(in: view)
-            modalContainerTopConstraint = containerView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: (startModalPosition * 2))
-            modalContainerTopConstraint?.isActive = true
-        } else {
-            canShowBackgroundOnSwipe = true
-            containerView.configure(in: view)
-            modalContainerTopConstraint = containerView.topAnchor.constraint(equalTo: view.topAnchor, constant: (startModalPosition * 2))
-            modalContainerTopConstraint?.isActive = true
+        default: canShowBackgroundOnSwipe = true
         }
+        
+        containerView.configure(in: view, withPresentation: presentationType)
+        modalContainerTopConstraint = containerView.topAnchor.constraint(equalTo: parentView.topAnchor, constant: initialContainerPosition)
+        modalContainerTopConstraint?.isActive = true
+        managerTopPosition = modalContainerTopConstraint?.constant ?? 0
+        
+        callerVc = viewController
     }
     
-    func show() {
-        if presentationType == .modal {
-            animate({[weak self] in
-                self?.modalWrapperTopConstraint?.constant = self?.startModalPosition ?? 0
-                self?.modalContainerTopConstraint?.constant = self?.startModalPosition ?? 0
+    // MARK: necessary to improve .alert behavior
+    func show(_ animationHasFinish: @escaping () -> Void = { /* Optional */ }) {
+        switch presentationType {
+        case .modal: present(onFinish: animationHasFinish)
+        case .alert:
+            callerVc?.present(self, animated: true, completion: { [weak self] in
+                self?.present(onFinish: animationHasFinish)
             })
-        } else {
-            // MARK: check to make call by self class
-            UIApplication.shared.inputViewController?.present(self, animated: true, completion: nil)
         }
     }
     
     func addView(_ view: UIView) {
         containerView.addSubview(view)
-        
-        if presentationType == .alert {
-            startModalPosition = (parentViewHeight - containerView.viewHeight)
-            modalContainerTopConstraint?.constant = startModalPosition * 2
-        }
+        resetPositon()
     }
     
     // MARK: private methods
     private func setupView() {
         view.backgroundColor = .clear
-        switch presentationType {
-        case .modal: containerView = ContainerView(withHeight: 80)
-        case .alert: containerView = ContainerView(withHeight: 140)
-        }
         containerView.draggDelegate = self
-        initialViewHeight = containerView.viewHeight
+    }
+    
+    private func present(onFinish animationHasFinish: @escaping () -> Void) {
+        let startModalPosition = parentViewHeight - initialViewHeight
+        
+        animate({ [weak self] in
+            self?.modalContainerTopConstraint?.constant = startModalPosition
+            
+            switch self?.presentationType {
+            case .modal?:
+                self?.modalWrapperTopConstraint?.constant = startModalPosition
+            default: break
+            }
+        }, completion: animationHasFinish)
     }
     
     private func handleModalSwipe(for sender: UIPanGestureRecognizer) {
-        if var managerTopPosition = modalContainerTopConstraint?.constant {
-            let currentTopPosition = parentViewHeight - managerTopPosition
-            
-            if currentTopPosition <= containerView.viewHeight && currentTopPosition >= initialViewHeight {
-                managerTopPosition += sender.translation(in: containerView).y
-            }
-            
-            modalContainerTopConstraint?.constant = managerTopPosition
-            backgroundViewBottomConstraint?.constant = managerTopPosition
-            if !canShowBackgroundOnSwipe {
-                modalWrapperTopConstraint?.constant = managerTopPosition
-            }
-            view.layoutIfNeeded()
-            removeBackgroundButton(isScrolling: true)
+        managerTopPosition = modalContainerTopConstraint?.constant ?? 0
+        let currentTopPosition = parentViewHeight - managerTopPosition
+        
+        if currentTopPosition <= containerView.viewHeight && currentTopPosition >= initialViewHeight {
+            managerTopPosition += sender.translation(in: containerView).y
         }
+        
+        modalContainerTopConstraint?.constant = managerTopPosition
+        backgroundViewBottomConstraint?.constant = managerTopPosition
+        
+        if !canShowBackgroundOnSwipe {
+            modalWrapperTopConstraint?.constant = managerTopPosition
+        }
+        
+        view.layoutIfNeeded()
+        removeBackgroundButton(isScrolling: true)
         sender.setTranslation(.zero, in: containerView)
     }
     
     private func toggleModal() {
-        if let modalTopPosition = modalContainerTopConstraint?.constant {
-            let currentTopPosition = parentViewHeight - modalTopPosition
-            var endPosition = startModalPosition
-            
-            //if currentTopPosition == initialViewHeight ||
-            if currentTopPosition > (containerView.viewHeight * 0.60) {
-                endPosition = parentViewHeight - containerView.viewHeight
-            }
-            
-            if !canShowBackgroundOnSwipe {
-                modalWrapperTopConstraint?.constant = endPosition
-            }
-            
-            modalContainerTopConstraint?.constant = endPosition
-            
-            toggleModalIconButton()
+        managerTopPosition = modalContainerTopConstraint?.constant ?? 0
+        let currentTopPosition = parentViewHeight - managerTopPosition
+        let topLimit = (containerView.viewHeight * 0.6)
+        var endPosition = startModalPosition
+        
+        if currentTopPosition > topLimit {
+            endPosition = parentViewHeight - containerView.viewHeight
         }
-    }
-    
-    private func handleSwipeAlert(for sender: UIPanGestureRecognizer) {
-        if var managerTopPosition = modalContainerTopConstraint?.constant {
-            let currentTopPosition = parentViewHeight - managerTopPosition
-            
-            if currentTopPosition <= containerView.viewHeight && currentTopPosition >= initialViewHeight {
-                managerTopPosition += sender.translation(in: containerView).y
-            }
-            
-            modalContainerTopConstraint?.constant = managerTopPosition
-            backgroundViewBottomConstraint?.constant = managerTopPosition
-            view.layoutIfNeeded()
-            removeBackgroundButton(isScrolling: true)
+        
+        if !canShowBackgroundOnSwipe {
+            modalWrapperTopConstraint?.constant = endPosition
         }
-        sender.setTranslation(.zero, in: containerView)
+        
+        modalContainerTopConstraint?.constant = endPosition
+        
+        animate { [weak self] in
+            if let modalClass = self {
+                modalClass.delegate?.didToggleModal(for: modalClass.modalIsOpen() ? .open : .dismiss)
+                modalClass.toggleBackgroundButton()
+                modalClass.containerView.toggleCloseButton(modalClass.modalIsOpen())
+            }
+        }
     }
     
     private func dismissAlert() {
-        modalContainerTopConstraint?.constant = (startModalPosition * 2)
-        animate({}, withDuration: 0.5, completion: {
-            self.removeBackgroundButton()
-            self.dismiss(animated: true, completion: nil)
-        })
-    }
-    
-    private func toggleModalIconButton() {
-        let isOpen = (parentViewHeight - (modalContainerTopConstraint?.constant ?? 0)) >= (containerView.viewHeight * 0.5)
+        let currentPosition = parentViewHeight - managerTopPosition
+        if currentPosition >= (containerView.viewHeight * 0.5) { return }
         
-        animate({}) {[weak self] in
-            if isOpen {
-                self?.delegate?.handleModalOpening()
-                self?.addBackgroundButton()
-                return
-            }
-            self?.delegate?.handleModalClosing()
+        modalContainerTopConstraint?.constant = (startModalPosition * 2)
+        animate(withDuration: 0.5) { [weak self] in
             self?.removeBackgroundButton()
+            self?.dismiss(animated: true, completion: nil)
         }
     }
     
-    private func animate(_ animations: @escaping () -> Void, withDuration of: TimeInterval = 0.25, completion: @escaping () -> Void = {}) {
+    private func modalIsOpen() -> Bool {
+        let topLimit = (containerView.viewHeight) * 0.6
+        return (parentViewHeight - (modalContainerTopConstraint?.constant ?? 0)) > topLimit
+    }
+    
+    private func toggleBackgroundButton() {
+        if !canShowBackgroundOnSwipe || backgroundView != nil { return }
+
+        if modalIsOpen() {
+            removeBackgroundButton()
+            return
+        }
+        
+        modalWrapperTopConstraint?.constant = 0
+        view.layoutIfNeeded()
+        
+        backgroundView = ModalBackgroundButton()
+        backgroundView?.fade(.fadeOut)
+        backgroundViewBottomConstraint = backgroundView!.bottomAnchor.constraint(equalTo: containerView.topAnchor)
+        
+        view.addSubview(backgroundView!)
+        NSLayoutConstraint.activate([
+            backgroundView!.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundView!.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
+            backgroundView!.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
+            backgroundViewBottomConstraint!
+        ])
+        view.layoutIfNeeded()
+        view.bringSubviewToFront(containerView)
+        backgroundView?.fade(.fadeIn)
+    }
+        
+    private func removeBackgroundButton(isScrolling: Bool = false) {
+        if !canShowBackgroundOnSwipe || isScrolling || backgroundView != nil { return }
+        
+        let modalTopPosition = parentViewHeight - initialViewHeight
+        
+        backgroundView?.fade(.fadeOut, withTime: 0.5) { [weak self] in
+            self?.modalWrapperTopConstraint?.constant = modalTopPosition
+            self?.backgroundView?.removeFromSuperview()
+            self?.backgroundView = nil
+        }
+    }
+    
+    private func animate(_ animations: @escaping () -> Void = { /* Optional */ },
+                         withDuration of: TimeInterval = 0.25,
+                         completion: @escaping () -> Void = { /* Optional */ }) {
         UIView.animate(withDuration: of, animations: { [weak self] in
             animations()
             self?.view.layoutIfNeeded()
         }, completion: {(wasFinished) in
-            if wasFinished {
-                completion()
-            }
+            if wasFinished { completion() }
         })
     }
     
-    private func addBackgroundButton() {
-        if !canShowBackgroundOnSwipe { return }
-
-        if backgroundView == nil {
-            modalWrapperTopConstraint?.constant = 0
-            view.layoutIfNeeded()
-            
-            backgroundView = BackgroundButton()
-            
-            backgroundView?.translatesAutoresizingMaskIntoConstraints = false
-            backgroundView?.backgroundColor = (.black as UIColor).withAlphaComponent(0.5)
-            backgroundView?.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-            backgroundView?.fadeOut()
-            
-            backgroundViewBottomConstraint = backgroundView!.bottomAnchor.constraint(equalTo: containerView.topAnchor)
-            
-            view.addSubview(backgroundView!)
-            
-            NSLayoutConstraint.activate([
-                backgroundView!.topAnchor.constraint(equalTo: view.topAnchor),
-                backgroundView!.leadingAnchor.constraint(equalTo: containerView.leadingAnchor),
-                backgroundView!.trailingAnchor.constraint(equalTo: containerView.trailingAnchor),
-                backgroundViewBottomConstraint!
-            ])
-            view.layoutIfNeeded()
-            view.bringSubviewToFront(containerView)
-            backgroundView?.fadeIn()
-        }
-    }
-    
-    func removeBackgroundButton(isScrolling: Bool = false) {
-        if !canShowBackgroundOnSwipe || isScrolling { return }
+    private func resetPositon() {
+        let hiddenPosition = (parentViewHeight - containerView.viewHeight) * 2
+        modalContainerTopConstraint?.constant = hiddenPosition
         
-        if backgroundView != nil {
-            backgroundView?.fadeOut(withTime: 0.5, completion: {[weak self] in
-                if let selfClass = self {
-                    selfClass.modalWrapperTopConstraint?.constant = selfClass.parentViewHeight - selfClass.initialViewHeight
-                }
-                self?.backgroundView?.removeFromSuperview()
-                self?.backgroundView = nil
-            })
+        switch presentationType {
+        case .modal:
+            modalWrapperTopConstraint?.constant = hiddenPosition
+        default: break
         }
+        containerView.toggleCloseButton(false)
     }
 }
 
@@ -253,16 +260,9 @@ extension ModalViewController: ContainerViewTappingDelegate {
     }
     
     func didEndDragging(_ sender: UIPanGestureRecognizer) {
-        if presentationType == .alert {
-            if let modalTopPosition = modalContainerTopConstraint?.constant {
-                let currentTopPosition = parentViewHeight - modalTopPosition
-                if currentTopPosition <= (containerView.viewHeight * 0.5) {
-                    dismissAlert()
-                    return
-                }
-            }
-            
+        switch presentationType {
+        case .alert: dismissAlert()
+        default: toggleModal()
         }
-        toggleModal()
     }
 }

@@ -8,6 +8,8 @@
 
 protocol ModalViewDelegate: class {
     func didToggleModal(for state: ModalEnum.State)
-    func handleModalOpening()
-    func handleModalClosing()
+}
+
+protocol ModalDataSourceDelegate: class {
+    func didSelectItem(for item: ModalEnum.OptionsCell)
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		177BB6F2246469BE004180DD /* HeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177BB6F1246469BE004180DD /* HeaderView.swift */; };
 		1780D39C24534D1500DE5FF9 /* ModalEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1780D39B24534D1500DE5FF9 /* ModalEnum.swift */; };
 		17A790D024522FE4005C0429 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A790CF24522FE4005C0429 /* AppDelegate.swift */; };
 		17A790D224522FE4005C0429 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A790D124522FE4005C0429 /* SceneDelegate.swift */; };
@@ -24,8 +25,8 @@
 		17B5376A245A5FA300DD0C7D /* ModalViewProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B53769245A5FA300DD0C7D /* ModalViewProtocols.swift */; };
 		17B5376C245A5FD000DD0C7D /* ContainerViewProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B5376B245A5FD000DD0C7D /* ContainerViewProtocols.swift */; };
 		17B5376F245A602000DD0C7D /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B5376E245A602000DD0C7D /* ContainerView.swift */; };
-		17B53771245A60B100DD0C7D /* BackgroundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B53770245A60B100DD0C7D /* BackgroundButton.swift */; };
-		17B53774245A611A00DD0C7D /* BackgroundButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B53773245A611A00DD0C7D /* BackgroundButton+Extension.swift */; };
+		17B53771245A60B100DD0C7D /* ModalBackgroundButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B53770245A60B100DD0C7D /* ModalBackgroundButton.swift */; };
+		17B53774245A611A00DD0C7D /* ModalBackgroundButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B53773245A611A00DD0C7D /* ModalBackgroundButton+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		177BB6F1246469BE004180DD /* HeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderView.swift; sourceTree = "<group>"; };
 		1780D39B24534D1500DE5FF9 /* ModalEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalEnum.swift; sourceTree = "<group>"; };
 		17A790CC24522FE4005C0429 /* dynamic-modal.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "dynamic-modal.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		17A790CF24522FE4005C0429 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -69,8 +71,8 @@
 		17B53769245A5FA300DD0C7D /* ModalViewProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewProtocols.swift; sourceTree = "<group>"; };
 		17B5376B245A5FD000DD0C7D /* ContainerViewProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewProtocols.swift; sourceTree = "<group>"; };
 		17B5376E245A602000DD0C7D /* ContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
-		17B53770245A60B100DD0C7D /* BackgroundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundButton.swift; sourceTree = "<group>"; };
-		17B53773245A611A00DD0C7D /* BackgroundButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "BackgroundButton+Extension.swift"; sourceTree = "<group>"; };
+		17B53770245A60B100DD0C7D /* ModalBackgroundButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalBackgroundButton.swift; sourceTree = "<group>"; };
+		17B53773245A611A00DD0C7D /* ModalBackgroundButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ModalBackgroundButton+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -98,6 +100,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		177BB6F0246469AC004180DD /* ModalCell */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ModalCell;
+			sourceTree = "<group>";
+		};
 		1780D39A24534D0000DE5FF9 /* Enums */ = {
 			isa = PBXGroup;
 			children = (
@@ -227,8 +236,10 @@
 		17B5376D245A601500DD0C7D /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				177BB6F0246469AC004180DD /* ModalCell */,
+				177BB6F1246469BE004180DD /* HeaderView.swift */,
 				17B5376E245A602000DD0C7D /* ContainerView.swift */,
-				17B53770245A60B100DD0C7D /* BackgroundButton.swift */,
+				17B53770245A60B100DD0C7D /* ModalBackgroundButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -236,7 +247,7 @@
 		17B53772245A60FE00DD0C7D /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				17B53773245A611A00DD0C7D /* BackgroundButton+Extension.swift */,
+				17B53773245A611A00DD0C7D /* ModalBackgroundButton+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -375,13 +386,14 @@
 				17A7910124523B7E005C0429 /* ModalViewController.swift in Sources */,
 				17A7910824523E66005C0429 /* HomeEnum.swift in Sources */,
 				17A7910A24523EE4005C0429 /* HomeRouter.swift in Sources */,
-				17B53774245A611A00DD0C7D /* BackgroundButton+Extension.swift in Sources */,
+				17B53774245A611A00DD0C7D /* ModalBackgroundButton+Extension.swift in Sources */,
 				17A790D424522FE4005C0429 /* ViewController.swift in Sources */,
 				1780D39C24534D1500DE5FF9 /* ModalEnum.swift in Sources */,
 				17B5376C245A5FD000DD0C7D /* ContainerViewProtocols.swift in Sources */,
 				17A790D024522FE4005C0429 /* AppDelegate.swift in Sources */,
 				17A790D224522FE4005C0429 /* SceneDelegate.swift in Sources */,
-				17B53771245A60B100DD0C7D /* BackgroundButton.swift in Sources */,
+				17B53771245A60B100DD0C7D /* ModalBackgroundButton.swift in Sources */,
+				177BB6F2246469BE004180DD /* HeaderView.swift in Sources */,
 				17B5376F245A602000DD0C7D /* ContainerView.swift in Sources */,
 				17B537672457C3ED00DD0C7D /* TableViewController.swift in Sources */,
 				17B5376A245A5FA300DD0C7D /* ModalViewProtocols.swift in Sources */,
