@@ -4,7 +4,7 @@ Componente de modal em swift 5.x para ser utilizado também como um alerta contr
 # Screen shots
 
 Modal fechada (s/ título)
-![](snapshots/modal-closed.png)
+![](snapshots/modal-closed-no-title.png)
 
 
 Modal aberta (s/ título)
