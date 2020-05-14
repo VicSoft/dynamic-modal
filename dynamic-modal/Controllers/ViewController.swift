@@ -25,7 +25,6 @@ class ViewController: UIViewController {
         
         modalView = ModalViewController(withType: .modal(title: "Título da modal"), initialHeight: 88)
         modalView?.delegate = self
-        modalView?.canShowBackgroundOnSwipe = true
         modalView?.configure(in: self)
         modalView?.addView(getTableView())
     }

@@ -16,6 +16,7 @@ final class HeaderView: UIView {
         button.titleLabel?.font = UIFont.systemFont(ofSize: 24)
         button.accessibilityLabel = "abrir"
         button.accessibilityIdentifier = "toque duas vezes para abrir"
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     private let titleLabel: UILabel = {
@@ -23,11 +24,13 @@ final class HeaderView: UIView {
         title.font = UIFont.boldSystemFont(ofSize: 16)
         title.textColor = UIColor.black.withAlphaComponent(0.9)
         title.accessibilityTraits = .header
+        title.translatesAutoresizingMaskIntoConstraints = false
         return title
     }()
     private let divisorLineView: UIView = {
         let line = UIView()
         line.backgroundColor = UIColor.gray.withAlphaComponent(0.7)
+        line.translatesAutoresizingMaskIntoConstraints = false
         return line
     }()
     
@@ -91,7 +94,7 @@ final class HeaderView: UIView {
             closeButton.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
             closeButton.backgroundColor = .clear
             closeButton.setTitleColor(UIColor.black.withAlphaComponent(0.9), for: .normal)
-            closeButton.setTitle(">", for: .normal)
+            closeButton.setTitle("\u{2303}", for: .normal)
         } else {
             marginTop = 16
             closeButton.frame = CGRect(x: 0, y: 0, width: 48, height: 6)
@@ -102,11 +105,11 @@ final class HeaderView: UIView {
         addSubview(closeButton)
         NSLayoutConstraint.activate([
             closeButton.topAnchor.constraint(equalTo: topAnchor, constant: marginTop),
+            closeButton.centerXAnchor.constraint(equalTo: centerXAnchor),
             closeButton.widthAnchor.constraint(equalToConstant: closeButton.frame.width),
             closeButton.heightAnchor.constraint(equalToConstant: closeButton.frame.height)
         ])
         layoutIfNeeded()
-        closeButton.frame.origin.x = (frame.maxX / 2) + closeButton.frame.width
         viewHeightConstraint?.constant += (closeButton.frame.height + marginTop)
     }
     
@@ -118,7 +121,6 @@ final class HeaderView: UIView {
                 titleLabel.topAnchor.constraint(equalTo: closeButton.bottomAnchor, constant: 1),
                 centerXAnchor.constraint(equalTo: titleLabel.centerXAnchor)
             ])
-            
             layoutIfNeeded()
             viewHeightConstraint?.constant += (1 + titleLabel.frame.height)
         }

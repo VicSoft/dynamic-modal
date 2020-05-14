@@ -3,6 +3,6 @@ Componente de modal em swift 5.x para ser utilizado também como um alerta contr
 
 # Screen shots
 
-Modal fechada (s/ título)  |  Modal aberta (s/ título)
+Modal fechada              |  Modal aberta (s/background)
 :-------------------------:|:-------------------------:
-![](snapshots/modal-closed-no-title.png)   |  ![](snapshots/modal-openned-no-title-no-background.png)
+![](snapshots/modal-closed.png)   |  ![](snapshots/modal-openned-no-bg.png)
