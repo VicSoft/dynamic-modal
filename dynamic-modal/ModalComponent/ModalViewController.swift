@@ -15,8 +15,7 @@ final class ModalViewController: UIViewController {
     weak var delegate: ModalViewDelegate?
     
     // view height without navigationBar
-    private let parentViewHeight: CGFloat = UIScreen.main.bounds.height
-    
+    private var parentViewHeight: CGFloat = UIScreen.main.bounds.height
     private var initialViewHeight: CGFloat
     private var managerTopPosition: CGFloat = 0
     private var modalContainerTopConstraint: NSLayoutConstraint?
@@ -37,6 +36,7 @@ final class ModalViewController: UIViewController {
         presentationType = withType
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
+        view.accessibilityIdentifier = "superviewArea"
         setupView()
     }
     
@@ -54,15 +54,24 @@ final class ModalViewController: UIViewController {
         super.viewDidAppear(animated)
         
         switch presentationType {
-        case .alert:
-            show {[weak self] in
-                self?.toggleBackgroundButton()
-            }
+        case .alert: toggleBackgroundButton()
         default: break
         }
     }
     
     func configure(in viewController: UIViewController) {
+        let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+        let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+        var spaceDiff = CGFloat.zero
+        
+        switch viewController.modalPresentationStyle {
+        case .fullScreen, .overFullScreen, .pageSheet: break
+        default: spaceDiff = statusBarHeight + 20
+        }
+        
+        parentViewHeight = parentViewHeight - spaceDiff
+        startModalPosition = parentViewHeight - containerView.initialViewHeight
+        
         let initialContainerPosition = (startModalPosition * 2)
         var parentView = view ?? UIView()
         
@@ -98,9 +107,9 @@ final class ModalViewController: UIViewController {
         switch presentationType {
         case .modal: present(onFinish: animationHasFinish)
         case .alert:
-            callerVc?.present(self, animated: true, completion: { [weak self] in
+            callerVc?.present(self, animated: true) { [weak self] in
                 self?.present(onFinish: animationHasFinish)
-            })
+            }
         }
     }
     
@@ -122,8 +131,7 @@ final class ModalViewController: UIViewController {
             self?.modalContainerTopConstraint?.constant = startModalPosition
             
             switch self?.presentationType {
-            case .modal?:
-                self?.modalWrapperTopConstraint?.constant = startModalPosition
+            case .modal?: self?.modalWrapperTopConstraint?.constant = startModalPosition
             default: break
             }
         }, completion: animationHasFinish)
@@ -145,6 +153,7 @@ final class ModalViewController: UIViewController {
         }
         
         view.layoutIfNeeded()
+        view.updateConstraintsIfNeeded()
         removeBackgroundButton(isScrolling: true)
         sender.setTranslation(.zero, in: containerView)
     }
@@ -235,6 +244,7 @@ final class ModalViewController: UIViewController {
         UIView.animate(withDuration: of, animations: { [weak self] in
             animations()
             self?.view.layoutIfNeeded()
+            self?.view.updateConstraintsIfNeeded()
         }, completion: {(wasFinished) in
             if wasFinished { completion() }
         })

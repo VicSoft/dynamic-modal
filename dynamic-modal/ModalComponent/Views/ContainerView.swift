@@ -41,12 +41,12 @@ final class ContainerView: UIView {
     func configure(in view: UIView, withPresentation presentation: ModalEnum.PresentationType) {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = bgColor
-        
+        accessibilityIdentifier = "containerArea"
         view.addSubview(self)
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: view.leadingAnchor),
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
             heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, constant: initialViewHeight)
         ])
         view.layoutIfNeeded()

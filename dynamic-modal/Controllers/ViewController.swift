@@ -23,7 +23,7 @@ class ViewController: UIViewController {
     private func setupView() {
         view.backgroundColor = (.red as UIColor).withAlphaComponent(0.5)
         
-        modalView = ModalViewController(withType: .modal(title: "Título da modal"), initialHeight: 88)
+        modalView = ModalViewController(withType: .alert, initialHeight: 88)
         modalView?.delegate = self
         modalView?.configure(in: self)
         modalView?.addView(getTableView())
