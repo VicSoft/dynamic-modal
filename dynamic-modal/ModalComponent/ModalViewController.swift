@@ -181,11 +181,11 @@ final class ModalViewController: UIViewController {
         }
     }
     
-    private func dismissAlert() {
+    private func dismissAlert(isForcedDismiss: Bool = false) {
         let currentPosition = parentViewHeight - managerTopPosition
         var initialPosition = startModalPosition * 2
         
-        if currentPosition >= (containerView.viewHeight * 0.5) {
+        if currentPosition >= (containerView.viewHeight * 0.5) && !isForcedDismiss {
             initialPosition = startModalPosition
         }
         
@@ -222,6 +222,7 @@ final class ModalViewController: UIViewController {
         
         backgroundView = ModalBackgroundButton()
         backgroundView?.fade(.fadeOut)
+        backgroundView?.addTarget(self, action: #selector(closeModalAction), for: .touchUpInside)
         backgroundViewBottomConstraint = backgroundView!.bottomAnchor.constraint(equalTo: containerView.topAnchor)
         
         view.addSubview(backgroundView!)
@@ -270,6 +271,13 @@ final class ModalViewController: UIViewController {
         default: break
         }
         containerView.toggleCloseButton(false)
+    }
+    
+    @objc private func closeModalAction() {
+        switch presentationType {
+        case .alert: dismissAlert(isForcedDismiss: true)
+        default: toggleModal()
+        }
     }
 }
 

@@ -21,7 +21,6 @@
 		17A7910824523E66005C0429 /* HomeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7910724523E66005C0429 /* HomeEnum.swift */; };
 		17A7910A24523EE4005C0429 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7910924523EE4005C0429 /* HomeRouter.swift */; };
 		17A7910E24524B66005C0429 /* ViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 17A7910D24524B66005C0429 /* ViewController.xib */; };
-		17B537672457C3ED00DD0C7D /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B537662457C3ED00DD0C7D /* TableViewController.swift */; };
 		17B5376A245A5FA300DD0C7D /* ModalViewProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B53769245A5FA300DD0C7D /* ModalViewProtocols.swift */; };
 		17B5376C245A5FD000DD0C7D /* ContainerViewProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B5376B245A5FD000DD0C7D /* ContainerViewProtocols.swift */; };
 		17B5376F245A602000DD0C7D /* ContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17B5376E245A602000DD0C7D /* ContainerView.swift */; };
@@ -67,7 +66,6 @@
 		17A7910724523E66005C0429 /* HomeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEnum.swift; sourceTree = "<group>"; };
 		17A7910924523EE4005C0429 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
 		17A7910D24524B66005C0429 /* ViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ViewController.xib; sourceTree = "<group>"; };
-		17B537662457C3ED00DD0C7D /* TableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		17B53769245A5FA300DD0C7D /* ModalViewProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewProtocols.swift; sourceTree = "<group>"; };
 		17B5376B245A5FD000DD0C7D /* ContainerViewProtocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerViewProtocols.swift; sourceTree = "<group>"; };
 		17B5376E245A602000DD0C7D /* ContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContainerView.swift; sourceTree = "<group>"; };
@@ -211,7 +209,6 @@
 			isa = PBXGroup;
 			children = (
 				17A790D324522FE4005C0429 /* ViewController.swift */,
-				17B537662457C3ED00DD0C7D /* TableViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -395,7 +392,6 @@
 				17B53771245A60B100DD0C7D /* ModalBackgroundButton.swift in Sources */,
 				177BB6F2246469BE004180DD /* HeaderView.swift in Sources */,
 				17B5376F245A602000DD0C7D /* ContainerView.swift in Sources */,
-				17B537672457C3ED00DD0C7D /* TableViewController.swift in Sources */,
 				17B5376A245A5FA300DD0C7D /* ModalViewProtocols.swift in Sources */,
 				17A7910524523DBC005C0429 /* HomeProtocol.swift in Sources */,
 			);
