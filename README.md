@@ -5,7 +5,7 @@ Componente de modal em swift 5.x para ser utilizado, também, como um alerta con
 #### Configuração da `presentationType` = .alert
 Modal aberta              
 :-------------------------:
-![](snapshots/alert-openned.PNG)
+![](snapshots/alert-openned.PNG | width=415)
 
 #### Configuração da `presentationType` = .modal(title: "Título da modal")
 Modal fechada              |  Modal aberta (s/background)
