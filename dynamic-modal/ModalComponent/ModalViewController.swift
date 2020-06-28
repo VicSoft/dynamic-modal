@@ -60,16 +60,16 @@ final class ModalViewController: UIViewController {
     }
     
     func configure(in viewController: UIViewController) {
-        let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
-        let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
-        var spaceDiff = CGFloat.zero
+        var heightDiff = (viewController.view.bounds.height - parentViewHeight)
         
-        switch viewController.modalPresentationStyle {
-        case .fullScreen, .overFullScreen, .pageSheet: break
-        default: spaceDiff = statusBarHeight + 20
+        if #available(iOS 13.0, *) {
+            let window = UIApplication.shared.windows.filter {$0.isKeyWindow}.first
+            let statusBarHeight = window?.windowScene?.statusBarManager?.statusBarFrame.height ?? 0
+            let toolbarHeight = ((viewController.navigationController?.navigationBar.frame.height ?? 0) + statusBarHeight)
+            heightDiff = heightDiff + toolbarHeight
         }
         
-        parentViewHeight = parentViewHeight - spaceDiff
+        parentViewHeight = viewController.view.bounds.height - heightDiff
         startModalPosition = parentViewHeight - containerView.initialViewHeight
         
         let initialContainerPosition = (startModalPosition * 2)
@@ -120,6 +120,13 @@ final class ModalViewController: UIViewController {
     func addView(_ view: UIView) {
         containerView.addSubview(view)
         resetPositon()
+    }
+    
+    func close() {
+        switch presentationType {
+        case .alert: dismissAlert()
+        default: toggleModal()
+        }
     }
     
     // MARK: private methods
@@ -288,9 +295,6 @@ extension ModalViewController: ContainerViewTappingDelegate {
     }
     
     func didEndDragging(_ sender: UIPanGestureRecognizer) {
-        switch presentationType {
-        case .alert: dismissAlert()
-        default: toggleModal()
-        }
+        close()
     }
 }
