@@ -11,7 +11,7 @@ import UIKit
 final class ContainerView: UIView {
     var viewHeight: CGFloat = 0
     var initialViewHeight: CGFloat = 0
-    var bgColor: UIColor = .white
+    var bgColor: UIColor = UIColor.white
     
     weak var draggDelegate: ContainerViewTappingDelegate?
     
@@ -50,6 +50,7 @@ final class ContainerView: UIView {
             heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, constant: initialViewHeight)
         ])
         view.layoutIfNeeded()
+        view.updateConstraintsIfNeeded()
         addHeader(with: presentation)
     }
     
@@ -75,7 +76,7 @@ final class ContainerView: UIView {
     
     private func addHeader(with presentationType: ModalEnum.PresentationType) {
         header = HeaderView()
-        
+        header?.backgroundColor = bgColor
         switch presentationType {
         case .modal(let title):
             header?.titleText = title
