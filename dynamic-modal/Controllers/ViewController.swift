@@ -12,7 +12,7 @@ final class CustomCell: UITableViewCell { }
 
 class ViewController: UIViewController {
     
-    var modalView: ModalViewController?
+    var modalView: Modal?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,9 +21,9 @@ class ViewController: UIViewController {
     }
 
     private func setupView() {
-        view.backgroundColor = (.red as UIColor).withAlphaComponent(0.5)
+        view.backgroundColor = (.red as UIColor)
         
-        modalView = ModalViewController(withType: .modal(title: "Título da modal"), initialHeight: 90)
+        modalView = Modal(withType: .modal(title: "Título da modal"), initialHeight: 90)
         modalView?.delegate = self
         modalView?.configure(in: self)
         modalView?.addView(getTableView())

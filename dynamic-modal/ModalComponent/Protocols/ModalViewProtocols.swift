@@ -13,3 +13,7 @@ protocol ModalViewDelegate: class {
 protocol ModalDataSourceDelegate: class {
     func didSelectItem(for item: ModalEnum.OptionsCell)
 }
+
+protocol HeaderViewDelegate: class {
+    func didTapToggleButton()
+}

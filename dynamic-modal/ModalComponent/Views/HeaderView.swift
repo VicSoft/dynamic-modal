@@ -38,6 +38,8 @@ final class HeaderView: UIView {
     var isArrowButton: Bool = false
     var shouldPresentLineView: Bool = true
     
+    weak var delegate: HeaderViewDelegate?
+    
     init() {
         super.init(frame: CGRect.zero)
     }
@@ -50,9 +52,8 @@ final class HeaderView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         
         if let superview = superview {
-            removeConstraints(constraints)
-            
             viewHeightConstraint = heightAnchor.constraint(greaterThanOrEqualToConstant: 17)
+            accessibilityIdentifier = "modalHeaderView"
             
             NSLayoutConstraint.activate([
                 topAnchor.constraint(equalTo: superview.topAnchor),
@@ -84,6 +85,10 @@ final class HeaderView: UIView {
         }
     }
     
+    @objc func tapCloseButtonAction(_ sender: Any) {
+        delegate?.didTapToggleButton()
+    }
+    
     // MARK: private methods
     private func setupButton() {
         var marginTop: CGFloat = .zero
@@ -95,6 +100,7 @@ final class HeaderView: UIView {
             closeButton.backgroundColor = .clear
             closeButton.setTitleColor(UIColor.black.withAlphaComponent(0.9), for: .normal)
             closeButton.setTitle("\u{2303}", for: .normal)
+            closeButton.addTarget(self, action: #selector(tapCloseButtonAction), for: .touchUpInside)
         } else {
             marginTop = 16
             closeButton.frame = CGRect(x: 0, y: 0, width: 48, height: 6)

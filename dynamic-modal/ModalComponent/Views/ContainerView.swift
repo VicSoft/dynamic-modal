@@ -42,15 +42,14 @@ final class ContainerView: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = bgColor
         accessibilityIdentifier = "containerArea"
+        
         view.addSubview(self)
         NSLayoutConstraint.activate([
             leadingAnchor.constraint(equalTo: view.leadingAnchor),
             trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
             heightAnchor.constraint(greaterThanOrEqualTo: view.heightAnchor, constant: initialViewHeight)
         ])
         view.layoutIfNeeded()
-        view.updateConstraintsIfNeeded()
         addHeader(with: presentation)
     }
     
@@ -77,6 +76,8 @@ final class ContainerView: UIView {
     private func addHeader(with presentationType: ModalEnum.PresentationType) {
         header = HeaderView()
         header?.backgroundColor = bgColor
+        header?.delegate = self
+        
         switch presentationType {
         case .modal(let title):
             header?.titleText = title
@@ -118,5 +119,11 @@ final class ContainerView: UIView {
             mask.path = path.cgPath
             view.layer.mask = mask
         }
+    }
+}
+
+extension ContainerView: HeaderViewDelegate {
+    func didTapToggleButton() {
+        draggDelegate?.didTapToggleButton()
     }
 }

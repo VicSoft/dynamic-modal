@@ -11,4 +11,5 @@ import UIKit
 protocol ContainerViewTappingDelegate: class {
     func didStartDragging(_ sender: UIPanGestureRecognizer)
     func didEndDragging(_ sender: UIPanGestureRecognizer)
+    func didTapToggleButton()
 }

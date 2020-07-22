@@ -16,7 +16,7 @@
 		17A790DC24522FF3005C0429 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 17A790DA24522FF3005C0429 /* LaunchScreen.storyboard */; };
 		17A790E724522FF3005C0429 /* dynamic_modalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A790E624522FF3005C0429 /* dynamic_modalTests.swift */; };
 		17A790F224522FF3005C0429 /* dynamic_modalUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A790F124522FF3005C0429 /* dynamic_modalUITests.swift */; };
-		17A7910124523B7E005C0429 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7910024523B7E005C0429 /* ModalViewController.swift */; };
+		17A7910124523B7E005C0429 /* Modal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7910024523B7E005C0429 /* Modal.swift */; };
 		17A7910524523DBC005C0429 /* HomeProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7910424523DBC005C0429 /* HomeProtocol.swift */; };
 		17A7910824523E66005C0429 /* HomeEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7910724523E66005C0429 /* HomeEnum.swift */; };
 		17A7910A24523EE4005C0429 /* HomeRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17A7910924523EE4005C0429 /* HomeRouter.swift */; };
@@ -61,7 +61,7 @@
 		17A790ED24522FF3005C0429 /* dynamic-modalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "dynamic-modalUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		17A790F124522FF3005C0429 /* dynamic_modalUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = dynamic_modalUITests.swift; sourceTree = "<group>"; };
 		17A790F324522FF3005C0429 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		17A7910024523B7E005C0429 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
+		17A7910024523B7E005C0429 /* Modal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Modal.swift; sourceTree = "<group>"; };
 		17A7910424523DBC005C0429 /* HomeProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeProtocol.swift; sourceTree = "<group>"; };
 		17A7910724523E66005C0429 /* HomeEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeEnum.swift; sourceTree = "<group>"; };
 		17A7910924523EE4005C0429 /* HomeRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRouter.swift; sourceTree = "<group>"; };
@@ -176,7 +176,7 @@
 				17B5376D245A601500DD0C7D /* Views */,
 				17B53768245A5F8400DD0C7D /* Protocols */,
 				1780D39A24534D0000DE5FF9 /* Enums */,
-				17A7910024523B7E005C0429 /* ModalViewController.swift */,
+				17A7910024523B7E005C0429 /* Modal.swift */,
 			);
 			path = ModalComponent;
 			sourceTree = "<group>";
@@ -380,7 +380,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				17A7910124523B7E005C0429 /* ModalViewController.swift in Sources */,
+				17A7910124523B7E005C0429 /* Modal.swift in Sources */,
 				17A7910824523E66005C0429 /* HomeEnum.swift in Sources */,
 				17A7910A24523EE4005C0429 /* HomeRouter.swift in Sources */,
 				17B53774245A611A00DD0C7D /* ModalBackgroundButton+Extension.swift in Sources */,
@@ -561,7 +561,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B384R35JC3;
 				INFOPLIST_FILE = "dynamic-modal/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -580,7 +580,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = B384R35JC3;
 				INFOPLIST_FILE = "dynamic-modal/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

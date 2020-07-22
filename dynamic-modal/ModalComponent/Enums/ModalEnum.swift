@@ -7,7 +7,7 @@
 //
 
 enum ModalEnum {
-    enum PresentationType {
+    enum PresentationType: Equatable {
         case modal(title: String)
         case alert
     }
